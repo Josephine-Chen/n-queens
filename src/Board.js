@@ -100,7 +100,7 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      var arr = []
+      var arr = [];
       for (var k = 0; k < this.get('n'); k++) {
         arr.push(this.get(k)[colIndex]); // pushes column element of every row
       }
@@ -112,8 +112,9 @@
       //this.get(rowNum)[colNum] = [i, j]
       var dim = this.get('n');
       for (var j = 0; j < dim; j++) {
-        if (this.hasColConflictAt(j))
+        if (this.hasColConflictAt(j)) {
           return true;
+        }
       }
       return false;
     },
@@ -143,9 +144,10 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      for(var m = -(this.get('n') - 1); m < this.get('n'); m++) {
-        if (this.hasMajorDiagonalConflictAt(m))
+      for (var m = -(this.get('n') - 1); m < this.get('n'); m++) {
+        if (this.hasMajorDiagonalConflictAt(m)) {
           return true;
+        }
       }
       return false;
 
@@ -158,11 +160,30 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      var flag = 0;
+      var x = minorDiagonalColumnIndexAtFirstRow;
+      for (var y = 0; y < this.get('n'); y++) {
+        if (this._isInBounds(y, x)) {  // check if in bounds...
+          if (this.get(y)[x] === 1) { // if we have a value
+            flag++;
+          }
+          if (flag === 2) {
+            return true;
+          }
+        }
+        x--;
+      }
       return false;
+
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      for (var m = 0; m <= 2 * (this.get('n') - 1); m++) {
+        if (this.hasMinorDiagonalConflictAt(m)) {
+          return true;
+        }
+      }
       return false;
     }
 
