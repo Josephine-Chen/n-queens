@@ -167,3 +167,29 @@ window.symBinCountNQueensSolutions = function(n) {
   return count << 1; //Double the count afterwards because symmetry
 
 };
+
+/*
+//https://twitter.com/spellrp/status/332992908565295104
+// N(permutations, ld, col, rd, count, poss, bit)
+function N(Q,u,ee,n,s,H,R){
+  s=0;
+  //Q = n;
+  //u = ld
+  Q=u?Q:(1<<Q)-1;
+  //Q is permutations
+  //ee is col
+  //n is rd
+  H=~(u|ee|n)&Q;
+  while(H)
+  //H is possessions
+  //R is bit
+    H^=R=-H&H,
+    s+=N(Q,(u|R)<<1,ee|R,(n|R)>>1);
+  //s is count
+  return s+=ee==Q  count += (col == permutations)
+  //s+=(ee==Q)
+}
+
+*/
+
+
