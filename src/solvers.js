@@ -110,15 +110,14 @@ window.countNQueensSolutions = function(n) {
 
 window.binaryCountNQueensSolutions = function(n) {
   var count = 0;
-  var permutations = Math.pow(2, n) - 1; // Total number of bitwise combinations
+  var permutations = (1 << n) - 1; // Total number of bitwise combinations
 
   var placer = function(ld, col, rd) { // Recursion
     if (col === permutations) {
       count++;
       return;
     }
-
-    var possession = ~(ld | col | rd) // alsl is permutation
+    var possession = ~(ld | col | rd);
 
     while (possession & permutations) {
       var bit = possession & -possession;
@@ -127,6 +126,48 @@ window.binaryCountNQueensSolutions = function(n) {
     }
   };
 
-  placer(0,0,0);
+  placer(0, 0, 0);
   return count;
+};
+
+window.symBinCountNQueensSolutions = function(n) {
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  var count = 0;
+  var permutations = (1 << n) - 1;
+
+  var isEven = function(n) {
+    return n & 1;
+  }
+  //If even, exclude right half of first row
+  //If odd, exclude right half of first row not including middle square
+  //2nd row, exclude right half of 2nd row if Q in first row middle square
+  var excluded = (1 << ((n/2)^0)) - 1; //excluded half of the permutations
+  var flag = (n & 1) ?  0 : 1; //Set flag depending on if n is even
+
+  var placer = function(ld, col, rd, flag) { // Recursion
+    if (col === permutations) {
+      count++;
+      return;
+    }
+    //If odd, exclude again and then set excluded to 0 afterwards.
+    //If even, set excluded to 0
+    if (flag < 0) {
+      excluded = 0;
+    }
+    var possession = ~(ld | col | rd | excluded); //Remember to filter out right half of first row
+
+    while (possession & permutations) {
+      var bit = possession & -possession;
+      possession -= bit;
+      flag--;
+
+      placer((ld | bit) >> 1, (col | bit), (rd | bit) << 1, flag);
+    }
+  };
+
+  placer(0, 0, 0, flag);
+  return count<<1; //Double the count afterwards because symmetry
+
 }
