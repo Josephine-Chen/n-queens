@@ -136,15 +136,11 @@ window.symBinCountNQueensSolutions = function(n) {
   }
   var count = 0;
   var permutations = (1 << n) - 1;
-
-  var isEven = function(n) {
-    return n & 1;
-  }
   //If even, exclude right half of first row
   //If odd, exclude right half of first row not including middle square
   //2nd row, exclude right half of 2nd row if Q in first row middle square
-  var excluded = (1 << ((n/2)^0)) - 1; //excluded half of the permutations
-  var flag = (n & 1) ?  0 : 1; //Set flag depending on if n is even
+  var excluded = (1 << ((n / 2) ^ 0)) - 1; //excluded half of the permutations
+  var flag = (n & 1) ? 0 : 1; //Set flag depending on if n is even
 
   var placer = function(ld, col, rd, flag) { // Recursion
     if (col === permutations) {
@@ -168,6 +164,6 @@ window.symBinCountNQueensSolutions = function(n) {
   };
 
   placer(0, 0, 0, flag);
-  return count<<1; //Double the count afterwards because symmetry
+  return count << 1; //Double the count afterwards because symmetry
 
-}
+};
