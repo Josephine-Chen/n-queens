@@ -36,7 +36,7 @@ window.findNRooksSolution = function(n) {
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   var solutionCount = 0;
-  var board = new Board({n: n}); // create a new empty board of size n
+  var board = new Board({n: n});
   var placeRook = function(y) {
     if (y === n) { //Reaches end of board
       return solutionCount++;
@@ -65,7 +65,6 @@ window.findNQueensSolution = function(n) {
       return;
     }
     for (var x = 0; x < n; x++) {
-      console.log(JSON.stringify(board.rows()));
       board.togglePiece(y, x);
       queenCount++;
       if (!board.hasAnyQueensConflicts()) {
@@ -108,3 +107,26 @@ window.countNQueensSolutions = function(n) {
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
+
+window.binaryCountNQueensSolutions = function(n) {
+  var count = 0;
+  var permutations = Math.pow(2, n) - 1; // Total number of bitwise combinations
+
+  var placer = function(ld, col, rd) { // Recursion
+    if (col === permutations) {
+      count++;
+      return;
+    }
+
+    var possession = ~(ld | col | rd) // alsl is permutation
+
+    while (possession & permutations) {
+      var bit = possession & -possession;
+      possession -= bit;
+      placer((ld | bit) >> 1, (col | bit), (rd | bit) << 1);
+    }
+  };
+
+  placer(0,0,0);
+  return count;
+}
